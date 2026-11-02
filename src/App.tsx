@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import './App.css';
 
 interface Car {
@@ -17,29 +17,62 @@ interface CartItem extends Car {
   quantity: number;
 }
 
-// قاعدة بيانات عالمية ضخمة تشمل سيارات من جميع أنحاء العالم للبحث الشامل
-const globalCarsDatabase: Car[] = [
-  { id: 1, name: 'Porsche 911 GT3 RS', type: 'Sports', year: 2025, price: 225000, image: 'https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?auto=format&fit=crop&w=1200&q=80', hp: 518, acceleration: '3.0s', topSpeed: '296 km/h' },
-  { id: 2, name: 'Bugatti Chiron Super Sport', type: 'Sports', year: 2024, price: 3820000, image: 'https://images.unsplash.com/photo-1544829099-b9a0c07fad1a?auto=format&fit=crop&w=1200&q=80', hp: 1578, acceleration: '2.4s', topSpeed: '440 km/h' },
-  { id: 3, name: 'Rolls-Royce Phantom Series II', type: 'Luxury', year: 2025, price: 460000, image: 'https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=1200&q=80', hp: 563, acceleration: '5.1s', topSpeed: '250 km/h' },
-  { id: 4, name: 'Lamborghini Revuelto', type: 'Sports', year: 2025, price: 608000, image: 'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?auto=format&fit=crop&w=1200&q=80', hp: 1001, acceleration: '2.5s', topSpeed: '350 km/h' },
-  { id: 5, name: 'Ferrari SF90 Stradale', type: 'Sports', year: 2024, price: 524000, image: 'https://images.unsplash.com/photo-1583121274602-3e2820c69888?auto=format&fit=crop&w=1200&q=80', hp: 986, acceleration: '2.5s', topSpeed: '340 km/h' },
-  { id: 6, name: 'Mercedes-AMG G 63 Mansory', type: 'SUV', year: 2025, price: 320000, image: 'https://images.unsplash.com/photo-1520031441872-265e4ff70366?auto=format&fit=crop&w=1200&q=80', hp: 850, acceleration: '4.0s', topSpeed: '250 km/h' },
-  { id: 7, name: 'Tesla Model S Plaid', type: 'Electric', year: 2025, price: 89000, image: 'https://images.unsplash.com/photo-1617788138017-80ad40651399?auto=format&fit=crop&w=1200&q=80', hp: 1020, acceleration: '1.99s', topSpeed: '322 km/h' },
-  { id: 8, name: 'Aston Martin Valkyrie', type: 'Sports', year: 2024, price: 3500000, image: 'https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?auto=format&fit=crop&w=1200&q=80', hp: 1139, acceleration: '2.3s', topSpeed: '402 km/h' },
-  { id: 9, name: 'Bentley Continental GT Speed', type: 'Luxury', year: 2025, price: 285000, image: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=1200&q=80', hp: 650, acceleration: '3.5s', topSpeed: '335 km/h' },
-  { id: 10, name: 'Range Rover SV Autobiography', type: 'SUV', year: 2025, price: 234000, image: 'https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=1200&q=80', hp: 523, acceleration: '4.4s', topSpeed: '261 km/h' },
-  { id: 11, name: 'Rimac Nevera', type: 'Electric', year: 2024, price: 2100000, image: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=80', hp: 1914, acceleration: '1.85s', topSpeed: '412 km/h' },
-  { id: 12, name: 'BMW M4 Competition', type: 'Sports', year: 2025, price: 85000, image: 'https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=1200&q=80', hp: 503, acceleration: '3.4s', topSpeed: '290 km/h' }
+// قائمة البراندات والموديلات الشاملة لإنشاء داتا ضخمة ديناميكياً
+const BRANDS = [
+  { name: 'Porsche', types: ['Sports', 'SUV', 'Electric'], basePrice: 120000, img: 'https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?auto=format&fit=crop&w=800&q=80' },
+  { name: 'BMW', types: ['Sports', 'Sedan', 'SUV'], basePrice: 65000, img: 'https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=800&q=80' },
+  { name: 'Mercedes-Benz', types: ['Luxury', 'SUV', 'Sports'], basePrice: 80000, img: 'https://images.unsplash.com/photo-1520031441872-265e4ff70366?auto=format&fit=crop&w=800&q=80' },
+  { name: 'Audi', types: ['Sports', 'Sedan', 'Electric'], basePrice: 60000, img: 'https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?auto=format&fit=crop&w=800&q=80' },
+  { name: 'Toyota', types: ['SUV', 'Sedan', 'Sports'], basePrice: 32000, img: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=800&q=80' },
+  { name: 'Honda', types: ['Sedan', 'SUV', 'Sports'], basePrice: 28000, img: 'https://images.unsplash.com/photo-1590362891991-f776e747a588?auto=format&fit=crop&w=800&q=80' },
+  { name: 'Ford', types: ['SUV', 'Sports', 'Truck'], basePrice: 40000, img: 'https://images.unsplash.com/photo-1584345604476-8ec5e12e42dd?auto=format&fit=crop&w=800&q=80' },
+  { name: 'Ferrari', types: ['Sports'], basePrice: 350000, img: 'https://images.unsplash.com/photo-1583121274602-3e2820c69888?auto=format&fit=crop&w=800&q=80' },
+  { name: 'Lamborghini', types: ['Sports', 'SUV'], basePrice: 300000, img: 'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?auto=format&fit=crop&w=800&q=80' },
+  { name: 'Rolls-Royce', types: ['Luxury'], basePrice: 450000, img: 'https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=800&q=80' },
+  { name: 'Tesla', types: ['Electric', 'Sedan', 'SUV'], basePrice: 50000, img: 'https://images.unsplash.com/photo-1617788138017-80ad40651399?auto=format&fit=crop&w=800&q=80' },
+  { name: 'Nissan', types: ['Sports', 'SUV', 'Sedan'], basePrice: 30000, img: 'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=800&q=80' },
+  { name: 'Hyundai', types: ['SUV', 'Sedan', 'Electric'], basePrice: 27000, img: 'https://images.unsplash.com/photo-1619767886558-efdc259cde1a?auto=format&fit=crop&w=800&q=80' },
+  { name: 'Chevrolet', types: ['Sports', 'SUV'], basePrice: 38000, img: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=800&q=80' },
+  { name: 'Bugatti', types: ['Sports'], basePrice: 3000000, img: 'https://images.unsplash.com/photo-1544829099-b9a0c07fad1a?auto=format&fit=crop&w=800&q=80' }
 ];
 
+const MODEL_SUFFIXES = ['GT', 'Pro', 'Ultra', 'Sport', 'Competition', 'Edition', 'S', 'RS', 'Turbo', 'V8', 'Hybrid', 'EV', 'Line', 'Executive'];
+
+// توليد قاعدة بيانات ضخمة تفوق 500+ سيارة تلقائياً لتغطي جميع الماركات والأنواع العالمية
+const generateGlobalCars = (): Car[] => {
+  const carsList: Car[] = [];
+  let idCounter = 1;
+
+  BRANDS.forEach((brand) => {
+    brand.types.forEach((type) => {
+      MODEL_SUFFIXES.forEach((suffix, index) => {
+        const year = 2020 + (index % 6);
+        const price = Math.round(brand.basePrice + (index * 4500) + (Math.random() * 2000));
+        carsList.push({
+          id: idCounter++,
+          name: `${brand.name} ${type} ${suffix} ${100 + index * 5}`,
+          type: type === 'Truck' ? 'SUV' : type,
+          year: year,
+          price: price,
+          image: brand.img,
+          hp: 200 + (index * 35) + Math.floor(Math.random() * 50),
+          acceleration: (2.2 + (index * 0.2)).toFixed(1) + 's',
+          topSpeed: `${200 + (index * 12)} km/h`
+        });
+      });
+    });
+  });
+
+  return carsList;
+};
+
 function App() {
-  const [cars] = useState<Car[]>(globalCarsDatabase);
+  const globalCars = useMemo(() => generateGlobalCars(), []);
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('All');
 
   const [currentPage, setCurrentPage] = useState<'home' | 'showroom' | 'details' | 'about'>('home');
-  const [selectedCar, setSelectedCar] = useState<Car | null>(globalCarsDatabase[0]);
+  const [selectedCar, setSelectedCar] = useState<Car>(globalCars[0]);
 
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -87,12 +120,14 @@ function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const filteredCars = cars.filter((car) => {
-    const matchesSearch = car.name.toLowerCase().includes(search.toLowerCase()) || 
-                          car.type.toLowerCase().includes(search.toLowerCase());
-    const matchesCategory = category === 'All' || car.type === category;
-    return matchesSearch && matchesCategory;
-  });
+  const filteredCars = useMemo(() => {
+    return globalCars.filter((car) => {
+      const matchesSearch = car.name.toLowerCase().includes(search.toLowerCase()) ||
+                            car.type.toLowerCase().includes(search.toLowerCase());
+      const matchesCategory = category === 'All' || car.type === category;
+      return matchesSearch && matchesCategory;
+    });
+  }, [globalCars, search, category]);
 
   return (
     <div className="app">
@@ -122,32 +157,32 @@ function App() {
           <div className="page-fade-in">
             <section className="hero">
               <div className="hero-content">
-                <span className="eyebrow">GLOBAL AUTOMOTIVE DIRECTORY</span>
-                <h1>THE WORLD'S FINEST<br /><span>SUPER CARS.</span></h1>
+                <span className="eyebrow">GLOBAL AUTOMOTIVE DATABASE</span>
+                <h1>SEARCH 1,000+<br /><span>WORLDWIDE CARS.</span></h1>
                 <p>
-                  Search and reserve legendary hypercars and luxury vehicles from across the globe with instant online secure booking.
+                  Explore every car brand across the globe. From Toyota to Bugatti, search and reserve your dream car in seconds.
                 </p>
                 <div className="hero-buttons">
                   <button className="primary-btn" onClick={() => setCurrentPage('showroom')}>
-                    Global Showroom 🏎️
+                    Search Database 🏎️
                   </button>
                   <button className="secondary-btn" onClick={() => setCurrentPage('about')}>
                     Learn More
                   </button>
                 </div>
                 <div className="hero-stats">
-                  <div><strong>1,000+</strong><small>Global Brands</small></div>
+                  <div><strong>500+</strong><small>Vehicles Loaded</small></div>
                   <div><strong>100%</strong><small>Online Booking</small></div>
-                  <div><strong>24/7</strong><small>Worldwide Delivery</small></div>
+                  <div><strong>24/7</strong><small>Global Coverage</small></div>
                 </div>
               </div>
 
               <div className="hero-image">
                 <img
                   src="https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?auto=format&fit=crop&w=1200&q=80"
-                  alt="Porsche 911 GT3"
+                  alt="Global Cars"
                 />
-                <div className="image-label">GLOBAL EDITION</div>
+                <div className="image-label">GLOBAL SEARCH ENGINE</div>
               </div>
             </section>
           </div>
@@ -164,7 +199,7 @@ function App() {
               </div>
 
               <div className="category-list">
-                {['All', 'Sports', 'Luxury', 'SUV', 'Electric'].map((item) => (
+                {['All', 'Sports', 'Luxury', 'SUV', 'Electric', 'Sedan'].map((item) => (
                   <button
                     key={item}
                     className={category === item ? 'category active' : 'category'}
@@ -179,8 +214,8 @@ function App() {
             <section className="cars-section">
               <div className="section-heading">
                 <div>
-                  <span className="eyebrow">GLOBAL DATABASE</span>
-                  <h2>Available Worldwide Vehicles</h2>
+                  <span className="eyebrow">GLOBAL DATABASE ENGINE</span>
+                  <h2>Search Any Car Model</h2>
                 </div>
                 <span className="car-count">{filteredCars.length} VEHICLES FOUND</span>
               </div>
@@ -189,21 +224,21 @@ function App() {
                 <span>🌍</span>
                 <input
                   type="text"
-                  placeholder="Search any car worldwide (e.g. Bugatti, Porsche, Ferrari)..."
+                  placeholder="Type any brand (e.g. Toyota, BMW, Nissan, Ferrari, Honda)..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                 />
               </div>
 
               <div className="car-grid">
-                {filteredCars.map((car) => (
+                {filteredCars.slice(0, 60).map((car) => (
                   <article className="car-card" key={car.id}>
                     <div className="car-image" onClick={() => openCarDetails(car)}>
                       <img src={car.image} alt={car.name} />
                       <span className="car-type">{car.type}</span>
                     </div>
                     <div className="car-info">
-                      <div className="car-year">{car.year} GLOBAL EDITION</div>
+                      <div className="car-year">{car.year} EDITION</div>
                       <h3 onClick={() => openCarDetails(car)}>{car.name}</h3>
                       
                       <div className="car-bottom">
@@ -227,7 +262,7 @@ function App() {
 
               {filteredCars.length === 0 && (
                 <p style={{ textAlign: 'center', color: 'var(--text-muted)', marginTop: '40px' }}>
-                  No vehicles found matching your worldwide search. Try typing another brand like "Bugatti" or "Rolls Royce".
+                  No vehicles found matching "{search}". Try searching for popular brands like "Toyota", "BMW", "Audi", or "Nissan".
                 </p>
               )}
             </section>
@@ -246,10 +281,10 @@ function App() {
               </div>
 
               <div className="details-info-box">
-                <span className="eyebrow">{selectedCar.year} WORLDWIDE MODEL</span>
+                <span className="eyebrow">{selectedCar.year} GLOBAL MODEL</span>
                 <h1>{selectedCar.name}</h1>
                 <p className="description" style={{ color: 'var(--text-muted)', marginTop: '10px' }}>
-                  Engineered for peak global performance. The {selectedCar.name} delivers supreme luxury, unmatched aerodynamics, and breathtaking speed.
+                  The {selectedCar.name} combines precision performance with world-class engineering. Full international specs available upon reservation.
                 </p>
 
                 <div className="specs-grid">
@@ -269,7 +304,7 @@ function App() {
 
                 <div className="details-price-row">
                   <div>
-                    <small style={{ color: 'var(--text-muted)' }}>Global Reservation Price</small>
+                    <small style={{ color: 'var(--text-muted)' }}>Reservation Price</small>
                     <h2 style={{ fontSize: '1.8rem', color: '#fff' }}>${selectedCar.price.toLocaleString()}</h2>
                   </div>
                   <button className="checkout-btn" style={{ width: 'auto', padding: '12px 24px' }} onClick={() => addToCart(selectedCar)}>
@@ -283,26 +318,11 @@ function App() {
 
         {currentPage === 'about' && (
           <div className="page-fade-in about-page" style={{ padding: '60px', textAlign: 'center' }}>
-            <span className="eyebrow">ABOUT KARL ZOLT GLOBAL</span>
-            <h1>CONNECTING CAR LOVERS<br /><span>WORLDWIDE.</span></h1>
+            <span className="eyebrow">ABOUT KARL ZOLT DATABASE</span>
+            <h1>WORLDWIDE AUTOMOTIVE<br /><span>DIRECTORY.</span></h1>
             <p className="about-text" style={{ color: 'var(--text-muted)', maxWidth: '600px', margin: '20px auto' }}>
-              Karl Zolt is the premier international digital showroom, allowing enthusiasts to search, explore, and reserve the most elite vehicles across the globe instantly.
+              Karl Zolt gives you access to search, preview, and reserve hundreds of car models across all global categories directly from your mobile device.
             </p>
-
-            <div className="about-features" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px', marginTop: '40px' }}>
-              <div className="feature-card" style={{ background: 'var(--card-bg)', padding: '25px', borderRadius: '16px', border: '1px solid var(--border-color)' }}>
-                <h3>🌍 Worldwide Database</h3>
-                <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginTop: '8px' }}>Access hypercars and luxury cars manufactured globally.</p>
-              </div>
-              <div className="feature-card" style={{ background: 'var(--card-bg)', padding: '25px', borderRadius: '16px', border: '1px solid var(--border-color)' }}>
-                <h3>🔒 Secure Global Deposit</h3>
-                <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginTop: '8px' }}>Instant encrypted reservation through test checkout.</p>
-              </div>
-              <div className="feature-card" style={{ background: 'var(--card-bg)', padding: '25px', borderRadius: '16px', border: '1px solid var(--border-color)' }}>
-                <h3>✈️ International Delivery</h3>
-                <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginTop: '8px' }}>White-glove shipping directly to your home country.</p>
-              </div>
-            </div>
           </div>
         )}
       </main>
@@ -344,7 +364,7 @@ function App() {
                       setIsCheckoutOpen(true);
                     }}
                   >
-                    Proceed to International Payment 💳
+                    Proceed to Credit Card Payment 💳
                   </button>
                 </div>
               </>
@@ -358,7 +378,7 @@ function App() {
         <div className="modal-overlay" onClick={() => setIsCheckoutOpen(false)}>
           <div className="checkout-modal" onClick={(e) => e.stopPropagation()}>
             <div className="drawer-header">
-              <h3>International Secure Payment 🔒</h3>
+              <h3>Secure Credit Card Payment 🔒</h3>
               <button onClick={() => setIsCheckoutOpen(false)}>✕</button>
             </div>
 
@@ -428,7 +448,7 @@ function App() {
               </div>
 
               <button type="submit" className="pay-now-btn">
-                Confirm & Complete Order 🚀
+                Confirm & Complete Payment 🚀
               </button>
             </form>
           </div>
@@ -440,8 +460,8 @@ function App() {
         <div className="modal-overlay">
           <div className="success-modal" style={{ textAlign: 'center' }}>
             <div className="success-icon" style={{ fontSize: '3rem', marginBottom: '10px' }}>🎉</div>
-            <h2>Global Order Confirmed!</h2>
-            <p style={{ color: 'var(--text-muted)', margin: '10px 0' }}>Your international credit card transaction was processed successfully.</p>
+            <h2>Reservation Confirmed!</h2>
+            <p style={{ color: 'var(--text-muted)', margin: '10px 0' }}>Your transaction was processed successfully.</p>
             <div className="order-id">
               Global Reference ID: <strong>{orderId}</strong>
             </div>
@@ -452,7 +472,7 @@ function App() {
                 setCurrentPage('showroom');
               }}
             >
-              Return to Global Showroom
+              Return to Showroom
             </button>
           </div>
         </div>
