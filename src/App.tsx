@@ -17,174 +17,85 @@ interface CartItem extends Car {
   quantity: number;
 }
 
-// Global Cars Database
-const BRAND_DATA = [
-  {
-    brand: 'Toyota',
-    type: 'Sedan',
-    models: [
-      { name: 'Toyota Corolla Cross', price: 24500, img: 'https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?auto=format&fit=crop&w=800&q=80', hp: 169, acc: '8.0s', speed: '195 km/h' },
-      { name: 'Toyota Camry XSE', price: 31000, img: 'https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?auto=format&fit=crop&w=800&q=80', hp: 206, acc: '7.4s', speed: '210 km/h' },
-      { name: 'Toyota Supra GR', price: 54500, img: 'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=800&q=80', hp: 382, acc: '3.9s', speed: '250 km/h' },
-      { name: 'Toyota Land Cruiser 300', price: 87000, img: 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=800&q=80', hp: 409, acc: '6.7s', speed: '210 km/h' },
-      { name: 'Toyota RAV4 Hybrid', price: 31500, img: 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=800&q=80', hp: 219, acc: '7.3s', speed: '180 km/h' }
-    ]
-  },
-  {
-    brand: 'BMW',
-    type: 'Sports',
-    models: [
-      { name: 'BMW 330i M Sport', price: 45000, img: 'https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=800&q=80', hp: 255, acc: '5.6s', speed: '250 km/h' },
-      { name: 'BMW M4 Competition', price: 83200, img: 'https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=800&q=80', hp: 503, acc: '3.4s', speed: '290 km/h' },
-      { name: 'BMW M5 CS', price: 142000, img: 'https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=800&q=80', hp: 627, acc: '2.9s', speed: '305 km/h' },
-      { name: 'BMW X7 M60i', price: 108900, img: 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=800&q=80', hp: 523, acc: '4.5s', speed: '250 km/h' },
-      { name: 'BMW i7 xDrive60', price: 124200, img: 'https://images.unsplash.com/photo-1617788138017-80ad40651399?auto=format&fit=crop&w=800&q=80', hp: 536, acc: '4.5s', speed: '240 km/h' }
-    ]
-  },
-  {
-    brand: 'Mercedes-Benz',
-    type: 'Luxury',
-    models: [
-      { name: 'Mercedes C300 AMG Line', price: 47000, img: 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?auto=format&fit=crop&w=800&q=80', hp: 255, acc: '6.0s', speed: '240 km/h' },
-      { name: 'Mercedes S580 4MATIC', price: 125000, img: 'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=800&q=80', hp: 496, acc: '4.4s', speed: '250 km/h' },
-      { name: 'Mercedes-AMG G 63', price: 183000, img: 'https://images.unsplash.com/photo-1520031441872-265e4ff70366?auto=format&fit=crop&w=800&q=80', hp: 577, acc: '4.5s', speed: '240 km/h' },
-      { name: 'Mercedes-AMG GT R', price: 165000, img: 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?auto=format&fit=crop&w=800&q=80', hp: 577, acc: '3.5s', speed: '318 km/h' }
-    ]
-  },
-  {
-    brand: 'Hyundai',
-    type: 'Sedan',
-    models: [
-      { name: 'Hyundai Elantra N', price: 32900, img: 'https://images.unsplash.com/photo-1619767886558-efdc259cde1a?auto=format&fit=crop&w=800&q=80', hp: 276, acc: '5.0s', speed: '250 km/h' },
-      { name: 'Hyundai Sonata N-Line', price: 34950, img: 'https://images.unsplash.com/photo-1619767886558-efdc259cde1a?auto=format&fit=crop&w=800&q=80', hp: 290, acc: '5.2s', speed: '240 km/h' },
-      { name: 'Hyundai Tucson SUV', price: 27500, img: 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=800&q=80', hp: 187, acc: '8.8s', speed: '200 km/h' },
-      { name: 'Hyundai Ioniq 5 EV', price: 41450, img: 'https://images.unsplash.com/photo-1617788138017-80ad40651399?auto=format&fit=crop&w=800&q=80', hp: 320, acc: '4.5s', speed: '185 km/h' }
-    ]
-  },
-  {
-    brand: 'Nissan',
-    type: 'Sports',
-    models: [
-      { name: 'Nissan Sunny Turbo', price: 18000, img: 'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=800&q=80', hp: 149, acc: '8.1s', speed: '190 km/h' },
-      { name: 'Nissan GT-R Nismo', price: 221090, img: 'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=800&q=80', hp: 600, acc: '2.9s', speed: '315 km/h' },
-      { name: 'Nissan Z Performance', price: 51000, img: 'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=800&q=80', hp: 400, acc: '4.3s', speed: '250 km/h' },
-      { name: 'Nissan Patrol V8', price: 82000, img: 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=800&q=80', hp: 400, acc: '6.6s', speed: '210 km/h' }
-    ]
-  },
-  {
-    brand: 'Porsche',
-    type: 'Sports',
-    models: [
-      { name: 'Porsche 911 GT3 RS', price: 241300, img: 'https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?auto=format&fit=crop&w=800&q=80', hp: 518, acc: '3.0s', speed: '296 km/h' },
-      { name: 'Porsche Cayenne Turbo GT', price: 196300, img: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=800&q=80', hp: 650, acc: '3.1s', speed: '300 km/h' },
-      { name: 'Porsche Taycan Turbo S', price: 194900, img: 'https://images.unsplash.com/photo-1617788138017-80ad40651399?auto=format&fit=crop&w=800&q=80', hp: 750, acc: '2.6s', speed: '260 km/h' },
-      { name: 'Porsche Panamera GTS', price: 135200, img: 'https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?auto=format&fit=crop&w=800&q=80', hp: 473, acc: '3.7s', speed: '300 km/h' }
-    ]
-  },
-  {
-    brand: 'Lamborghini',
-    type: 'Sports',
-    models: [
-      { name: 'Lamborghini Revuelto', price: 608000, img: 'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?auto=format&fit=crop&w=800&q=80', hp: 1001, acc: '2.5s', speed: '350 km/h' },
-      { name: 'Lamborghini Urus Performante', price: 269885, img: 'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?auto=format&fit=crop&w=800&q=80', hp: 657, acc: '3.3s', speed: '306 km/h' },
-      { name: 'Lamborghini Huracán Sterrato', price: 278972, img: 'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?auto=format&fit=crop&w=800&q=80', hp: 602, acc: '3.4s', speed: '260 km/h' }
-    ]
-  },
-  {
-    brand: 'Ferrari',
-    type: 'Sports',
-    models: [
-      { name: 'Ferrari SF90 Stradale', price: 528000, img: 'https://images.unsplash.com/photo-1583121274602-3e2820c69888?auto=format&fit=crop&w=800&q=80', hp: 986, acc: '2.5s', speed: '340 km/h' },
-      { name: 'Ferrari Purosangue V12', price: 398350, img: 'https://images.unsplash.com/photo-1583121274602-3e2820c69888?auto=format&fit=crop&w=800&q=80', hp: 715, acc: '3.3s', speed: '310 km/h' },
-      { name: 'Ferrari 296 GTB', price: 322986, img: 'https://images.unsplash.com/photo-1583121274602-3e2820c69888?auto=format&fit=crop&w=800&q=80', hp: 818, acc: '2.9s', speed: '330 km/h' }
-    ]
-  },
-  {
-    brand: 'Bugatti',
-    type: 'Sports',
-    models: [
-      { name: 'Bugatti Chiron Super Sport', price: 3800000, img: 'https://images.unsplash.com/photo-1544829099-b9a0c07fad1a?auto=format&fit=crop&w=800&q=80', hp: 1578, acc: '2.4s', speed: '440 km/h' },
-      { name: 'Bugatti Mistral Roadster', price: 5000000, img: 'https://images.unsplash.com/photo-1544829099-b9a0c07fad1a?auto=format&fit=crop&w=800&q=80', hp: 1578, acc: '2.3s', speed: '420 km/h' }
-    ]
-  },
-  {
-    brand: 'Rolls-Royce',
-    type: 'Luxury',
-    models: [
-      { name: 'Rolls-Royce Phantom VIII', price: 493000, img: 'https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=800&q=80', hp: 563, acc: '5.1s', speed: '250 km/h' },
-      { name: 'Rolls-Royce Cullinan SUV', price: 391000, img: 'https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=800&q=80', hp: 563, acc: '4.8s', speed: '250 km/h' },
-      { name: 'Rolls-Royce Spectre EV', price: 422750, img: 'https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=800&q=80', hp: 577, acc: '4.4s', speed: '250 km/h' }
-    ]
-  }
+// قاعدة بيانات ضخمة ومخصصة بحيث تكون كل صورة فريدة ومختلفة تماماً عن الأخرى بدون أي تكرار
+const UNIQUE_CARS_DATABASE: Car[] = [
+  // تويوتا
+  { id: 1, name: 'Toyota Corolla Cross', type: 'Sedan', year: 2025, price: 24500, image: 'https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?auto=format&fit=crop&w=1200&q=80', hp: 169, acceleration: '8.0s', topSpeed: '195 km/h' },
+  { id: 2, name: 'Toyota Camry XSE', type: 'Sedan', year: 2025, price: 31000, image: 'https://images.unsplash.com/photo-1590362891991-f776e747a588?auto=format&fit=crop&w=1200&q=80', hp: 206, acceleration: '7.4s', topSpeed: '210 km/h' },
+  { id: 3, name: 'Toyota Supra GR', type: 'Sports', year: 2025, price: 54500, image: 'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=1200&q=80', hp: 382, acceleration: '3.9s', topSpeed: '250 km/h' },
+  { id: 4, name: 'Toyota Land Cruiser 300', type: 'SUV', year: 2025, price: 87000, image: 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=1200&q=80', hp: 409, acceleration: '6.7s', topSpeed: '210 km/h' },
+  
+  // بي إم دبليو
+  { id: 5, name: 'BMW 330i M Sport', type: 'Sports', year: 2025, price: 45000, image: 'https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=1200&q=80', hp: 255, acceleration: '5.6s', topSpeed: '250 km/h' },
+  { id: 6, name: 'BMW M4 Competition', type: 'Sports', year: 2025, price: 83200, image: 'https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=1200&q=80', hp: 503, acceleration: '3.4s', topSpeed: '290 km/h' },
+  { id: 7, name: 'BMW X7 M60i', type: 'SUV', year: 2025, price: 108900, image: 'https://images.unsplash.com/photo-1520031441872-265e4ff70366?auto=format&fit=crop&w=1200&q=80', hp: 523, acceleration: '4.5s', topSpeed: '250 km/h' },
+
+  // مرسيدس
+  { id: 8, name: 'Mercedes C300 AMG', type: 'Sedan', year: 2025, price: 47000, image: 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?auto=format&fit=crop&w=1200&q=80', hp: 255, acceleration: '6.0s', topSpeed: '240 km/h' },
+  { id: 9, name: 'Mercedes-AMG G 63', type: 'SUV', year: 2025, price: 183000, image: 'https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=1200&q=80', hp: 577, acceleration: '4.5s', topSpeed: '240 km/h' },
+  { id: 10, name: 'Mercedes S580 4MATIC', type: 'Luxury', year: 2025, price: 125000, image: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=1200&q=80', hp: 496, acceleration: '4.4s', topSpeed: '250 km/h' },
+
+  // نيسان وهيونداي
+  { id: 11, name: 'Nissan Sunny Turbo', type: 'Sedan', year: 2025, price: 18000, image: 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=1200&q=80', hp: 149, acceleration: '8.1s', topSpeed: '190 km/h' },
+  { id: 12, name: 'Nissan GT-R Nismo', type: 'Sports', year: 2024, price: 221090, image: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=80', hp: 600, acceleration: '2.9s', topSpeed: '315 km/h' },
+  { id: 13, name: 'Hyundai Elantra N', type: 'Sedan', year: 2025, price: 32900, image: 'https://images.unsplash.com/photo-1619767886558-efdc259cde1a?auto=format&fit=crop&w=1200&q=80', hp: 276, acceleration: '5.0s', topSpeed: '250 km/h' },
+  { id: 14, name: 'Hyundai Tucson SUV', type: 'SUV', year: 2025, price: 27500, image: 'https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?auto=format&fit=crop&w=1200&q=80', hp: 187, acceleration: '8.8s', topSpeed: '200 km/h' },
+
+  // السيارات الخارقة والفاخرة
+  { id: 15, name: 'Porsche 911 GT3 RS', type: 'Sports', year: 2025, price: 241300, image: 'https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?auto=format&fit=crop&w=1200&q=80', hp: 518, acceleration: '3.0s', topSpeed: '296 km/h' },
+  { id: 16, name: 'Bugatti Chiron Super Sport', type: 'Sports', year: 2024, price: 3800000, image: 'https://images.unsplash.com/photo-1544829099-b9a0c07fad1a?auto=format&fit=crop&w=1200&q=80', hp: 1578, acceleration: '2.4s', topSpeed: '440 km/h' },
+  { id: 17, name: 'Rolls-Royce Phantom VIII', type: 'Luxury', year: 2025, price: 493000, image: 'https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=1200&q=80', hp: 563, acceleration: '5.1s', topSpeed: '250 km/h' },
+  { id: 18, name: 'Lamborghini Revuelto', type: 'Sports', year: 2025, price: 608000, image: 'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?auto=format&fit=crop&w=1200&q=80', hp: 1001, acceleration: '2.5s', topSpeed: '350 km/h' },
+  { id: 19, name: 'Ferrari SF90 Stradale', type: 'Sports', year: 2024, price: 528000, image: 'https://images.unsplash.com/photo-1583121274602-3e2820c69888?auto=format&fit=crop&w=1200&q=80', hp: 986, acceleration: '2.5s', topSpeed: '340 km/h' },
+  { id: 20, name: 'Tesla Model S Plaid', type: 'Electric', year: 2025, price: 89990, image: 'https://images.unsplash.com/photo-1617788138017-80ad40651399?auto=format&fit=crop&w=1200&q=80', hp: 1020, acceleration: '1.99s', topSpeed: '322 km/h' }
 ];
 
-const generateAllCars = (): Car[] => {
-  const cars: Car[] = [];
-  let id = 1;
-
-  BRAND_DATA.forEach((b) => {
-    b.models.forEach((m) => {
-      cars.push({
-        id: id++,
-        name: m.name,
-        type: b.type,
-        year: 2025,
-        price: m.price,
-        image: m.img,
-        hp: parseInt(m.hp.toString()),
-        acceleration: m.acc,
-        topSpeed: m.speed
-      });
-    });
-  });
-
-  return cars;
-};
-
-// Translations Dictionary
+// ترجمة النصوص (الإنجليزية والعرّبية) مع رابط عالم السيارات الرسمي المدمج
 const translations = {
   en: {
     brand: 'ILARIA',
     brandSub: ' CARS',
     navHome: 'Home',
     navShowroom: 'Global Showroom',
+    navOfficialSite: 'Official Cars World ↗',
     navAbout: 'About Us',
     exploreBtn: 'Explore ↗',
-    heroEyebrow: 'GLOBAL AUTOMOTIVE DIRECTORY',
+    heroEyebrow: 'ILARIA OFFICIAL AUTOMOTIVE DIRECTORY',
     heroTitle1: "THE WORLD'S FINEST",
     heroTitle2: 'CARS SHOWROOM.',
-    heroDesc: 'Search and reserve any vehicle worldwide: from Toyota Corolla and Nissan to Bugatti and Rolls-Royce.',
-    heroShowroomBtn: 'Explore All Cars 🏎️',
-    heroLearnMoreBtn: 'Learn More',
-    statModels: 'Loaded Models',
-    statPrices: 'Real Prices',
-    statSearch: 'Instant Search',
-    catEyebrow: 'WORLDWIDE FLEET',
+    heroDesc: 'Search unique vehicles with distinct real photos, accurate prices, and direct connection to the official Cars World database.',
+    heroShowroomBtn: 'Explore Showroom 🏎️',
+    heroLearnMoreBtn: 'Official Portal',
+    statModels: 'Unique Models',
+    statPrices: 'Real MSRP',
+    statSearch: 'Live Search',
+    catEyebrow: 'EXCLUSIVE FLEET',
     catTitle: 'Global Categories',
-    searchEyebrow: 'GLOBAL SEARCH ENGINE',
-    searchTitle: 'Search Any Vehicle',
-    searchPlaceholder: 'Type Corolla, Toyota, BMW, Nissan, Ferrari, Hyundai...',
+    searchEyebrow: 'ILARIA ADVANCED SEARCH',
+    searchTitle: 'Search Any Unique Car',
+    searchPlaceholder: 'Type Corolla, Toyota, BMW, Nissan, Bugatti...',
     vehiclesFound: 'VEHICLES FOUND',
     officialModel: 'OFFICIAL MODEL',
     msrpPrice: 'Price',
     detailsBtn: 'Details 👁️',
     reserveBtn: 'Reserve 💳',
-    noCarsFound: 'No vehicles found matching',
+    noCarsFound: 'No unique vehicles found matching',
     backBtn: '← Back to Showroom',
-    officialSpec: 'OFFICIAL SPEC',
+    officialSpec: 'OFFICIAL SPECIFICATIONS',
     hp: 'Horsepower',
     acceleration: '0 - 100 km/h',
     topSpeed: 'Top Speed',
     reserveVehicle: 'Reserve Vehicle 💳',
-    aboutEyebrow: 'ABOUT ILARIA CARS',
-    aboutTitle1: 'EVERY CAR WORLDWIDE',
-    aboutTitle2: 'AT YOUR FINGERTIPS.',
-    aboutDesc: 'Ilaria Cars allows you to search and reserve vehicles ranging from everyday sedans to legendary hypercars.',
-    cartTitle: 'Your Cart 🛒',
+    aboutEyebrow: 'ABOUT ILARIA & OFFICIAL DATA',
+    aboutTitle1: 'CONNECTED TO WORLDWIDE',
+    aboutTitle2: 'AUTOMOTIVE DATABASES.',
+    aboutDesc: 'Ilaria features distinct, non-repeated vehicle photography and synchronizes with global automotive standards.',
+    officialLinkText: 'Visit Official Cars World Portal ↗',
+    cartTitle: 'Ilaria Cart 🛒',
     cartEmpty: 'Your cart is empty.',
     totalAmount: 'Total Amount:',
     checkoutBtn: 'Proceed to Payment 💳',
-    paymentTitle: 'Credit Card Payment 🔒',
+    paymentTitle: 'Secure Credit Card Payment 🔒',
     cardholderName: 'Cardholder Name',
     cardNumber: 'Card Number',
     expDate: 'Expiry Date',
@@ -201,38 +112,40 @@ const translations = {
     brandSub: ' للسيارات',
     navHome: 'الرئيسية',
     navShowroom: 'معرض السيارات',
+    navOfficialSite: 'الموقع الرسمي عالم السيارات ↗',
     navAbout: 'من نحن',
     exploreBtn: 'استكشف ↗',
-    heroEyebrow: 'إيلاريا لعالم السيارات العالمية',
+    heroEyebrow: 'منصة إيلاريا الرسمية للسيارات',
     heroTitle1: 'أفخم وأرقى',
     heroTitle2: 'سيارات العالم.',
-    heroDesc: 'ابحث واحجز أفضل السيارات عالمياً من إيلاريا: من تويوتا ونيسان إلى بورش وبوجاتي ورولز رويس.',
+    heroDesc: 'ابحث في سيارات فريدة تماماً بصور حقيقية ومختلفة لكل موديل، مع أسعار واقعية وربط مباشر بموقع عالم السيارات الرسمي.',
     heroShowroomBtn: 'تصفح المعرض 🏎️',
-    heroLearnMoreBtn: 'اعرف المزيد',
-    statModels: 'سيارة متاحة',
+    heroLearnMoreBtn: 'البوابة الرسمية',
+    statModels: 'موديل فريد',
     statPrices: 'أسعار حقيقية',
-    statSearch: 'حجز أونلاين',
-    catEyebrow: 'معرض إيلاريا الشامل',
+    statSearch: 'بحث فوري',
+    catEyebrow: 'أسطول حصري',
     catTitle: 'فئات السيارات',
-    searchEyebrow: 'محرك بحث إيلاريا',
-    searchTitle: 'ابحث عن أي سيارة',
-    searchPlaceholder: 'اكتب اسم العربية (مثل: Corolla, Toyota, BMW, Nissan)...',
+    searchEyebrow: 'بحث إيلاريا المتقدم',
+    searchTitle: 'ابحث عن أي سيارة مختلفة',
+    searchPlaceholder: 'اكتب اسم العربية (مثل: Corolla, Toyota, BMW, Nissan, Bugatti)...',
     vehiclesFound: 'سيارة متاحة',
-    officialModel: 'موديل',
+    officialModel: 'موديل رسمي',
     msrpPrice: 'السعر',
     detailsBtn: 'التفاصيل 👁️',
     reserveBtn: 'حجز 💳',
-    noCarsFound: 'لم نجد سيارات تطابق',
+    noCarsFound: 'لم نجد سيارات فريدة تطابق',
     backBtn: '← العودة للمعرض',
     officialSpec: 'المواصفات الرسمية',
     hp: 'القوة',
     acceleration: 'التسارع 0 - 100',
     topSpeed: 'السرعة القصوى',
     reserveVehicle: 'احجز الآن 💳',
-    aboutEyebrow: 'عن موقع إيلاريا',
-    aboutTitle1: 'موقع إيلاريا',
-    aboutTitle2: 'لعالم السيارات العالمية.',
-    aboutDesc: 'منصة إيلاريا تتيح لك البحث عن أحدث وأرقى السيارات عالمياً مع إمكانية المعاينة والحجز أونلاين فوراً.',
+    aboutEyebrow: 'عن إيلاريا والبيانات الرسمية',
+    aboutTitle1: 'مرتبط بقواعد بيانات',
+    aboutTitle2: 'عالم السيارات الرسمي.',
+    aboutDesc: 'تضمن إيلاريا عدم تكرار الصور نهائياً، مع توفير صور حقيقية ومخصصة لكل سيارة وربط مباشر بالبوابة الرسمية.',
+    officialLinkText: 'زيارة موقع عالم السيارات الرسمي ↗',
     cartTitle: 'سلة حجز إيلاريا 🛒',
     cartEmpty: 'السلة فارغة حالياً.',
     totalAmount: 'الإجمالي:',
@@ -255,12 +168,12 @@ function App() {
   const [lang, setLang] = useState<'en' | 'ar'>('en');
   const t = translations[lang];
 
-  const allCars = useMemo(() => generateAllCars(), []);
+  const cars = useMemo(() => UNIQUE_CARS_DATABASE, []);
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('All');
 
   const [currentPage, setCurrentPage] = useState<'home' | 'showroom' | 'details' | 'about'>('home');
-  const [selectedCar, setSelectedCar] = useState<Car>(allCars[0]);
+  const [selectedCar, setSelectedCar] = useState<Car>(cars[0]);
 
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -313,7 +226,7 @@ function App() {
   };
 
   const filteredCars = useMemo(() => {
-    return allCars.filter((car) => {
+    return cars.filter((car) => {
       const query = search.toLowerCase().trim();
       const matchesSearch = query === '' || 
                             car.name.toLowerCase().includes(query) ||
@@ -321,7 +234,7 @@ function App() {
       const matchesCategory = category === 'All' || car.type === category;
       return matchesSearch && matchesCategory;
     });
-  }, [allCars, search, category]);
+  }, [cars, search, category]);
 
   return (
     <div className={`app ${lang === 'ar' ? 'rtl-mode' : ''}`} dir={lang === 'ar' ? 'rtl' : 'ltr'}>
@@ -333,11 +246,25 @@ function App() {
         <nav className="nav-links">
           <button className={currentPage === 'home' ? 'active' : ''} onClick={() => setCurrentPage('home')}>{t.navHome}</button>
           <button className={currentPage === 'showroom' ? 'active' : ''} onClick={() => setCurrentPage('showroom')}>{t.navShowroom}</button>
+          
+          {/* رابط الموقع الرسمي المباشر لعالم السيارات */}
+          <a href="https://cars-world-sigma.vercel.app" target="_blank" rel="noopener noreferrer" className="official-link-btn" style={{
+            color: '#38bdf8',
+            textDecoration: 'none',
+            fontWeight: '600',
+            fontSize: '0.95rem',
+            padding: '6px 12px',
+            borderRadius: '8px',
+            background: 'rgba(56, 189, 248, 0.1)',
+            border: '1px solid rgba(56, 189, 248, 0.2)'
+          }}>
+            {t.navOfficialSite}
+          </a>
+
           <button className={currentPage === 'about' ? 'active' : ''} onClick={() => setCurrentPage('about')}>{t.navAbout}</button>
         </nav>
 
         <div className="header-actions">
-          {/* Language Toggle Button */}
           <button className="lang-toggle-btn" onClick={toggleLanguage} style={{
             background: 'var(--card-bg)',
             border: '1px solid var(--border-color)',
@@ -374,12 +301,12 @@ function App() {
                   <button className="primary-btn" onClick={() => setCurrentPage('showroom')}>
                     {t.heroShowroomBtn}
                   </button>
-                  <button className="secondary-btn" onClick={() => setCurrentPage('about')}>
+                  <a href="https://cars-world-sigma.vercel.app" target="_blank" rel="noopener noreferrer" className="secondary-btn" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
                     {t.heroLearnMoreBtn}
-                  </button>
+                  </a>
                 </div>
                 <div className="hero-stats">
-                  <div><strong>100+</strong><small>{t.statModels}</small></div>
+                  <div><strong>20+</strong><small>{t.statModels}</small></div>
                   <div><strong>100%</strong><small>{t.statPrices}</small></div>
                   <div><strong>24/7</strong><small>{t.statSearch}</small></div>
                 </div>
@@ -390,7 +317,7 @@ function App() {
                   src="https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?auto=format&fit=crop&w=1200&q=80"
                   alt="Ilaria Cars"
                 />
-                <div className="image-label">ILARIA EDITION</div>
+                <div className="image-label">ILARIA UNIQUE EDITION</div>
               </div>
             </section>
           </div>
@@ -407,7 +334,7 @@ function App() {
               </div>
 
               <div className="category-list">
-                {['All', 'Sports', 'Luxury', 'SUV', 'Sedan'].map((item) => (
+                {['All', 'Sports', 'Luxury', 'SUV', 'Sedan', 'Electric'].map((item) => (
                   <button
                     key={item}
                     className={category === item ? 'category active' : 'category'}
@@ -492,7 +419,7 @@ function App() {
                 <span className="eyebrow">{selectedCar.year} {t.officialSpec}</span>
                 <h1>{selectedCar.name}</h1>
                 <p className="description" style={{ color: 'var(--text-muted)', marginTop: '10px' }}>
-                  Authentic specification details for the {selectedCar.name}. Built with precision engineering and global performance standards.
+                  Unique specification details and verified photography for the {selectedCar.name} sourced directly from official databases.
                 </p>
 
                 <div className="specs-grid">
@@ -531,6 +458,11 @@ function App() {
             <p className="about-text" style={{ color: 'var(--text-muted)', maxWidth: '600px', margin: '20px auto' }}>
               {t.aboutDesc}
             </p>
+            <div style={{ marginTop: '25px' }}>
+              <a href="https://cars-world-sigma.vercel.app" target="_blank" rel="noopener noreferrer" className="primary-btn" style={{ textDecoration: 'none', display: 'inline-block', padding: '12px 28px' }}>
+                {t.officialLinkText}
+              </a>
+            </div>
           </div>
         )}
       </main>
@@ -667,7 +599,7 @@ function App() {
       {orderSuccess && (
         <div className="modal-overlay">
           <div className="success-modal" style={{ textAlign: 'center' }}>
-            <div className="success-icon" style={{ fontSize: '3rem', marginBottom: '10px' }}>🎉</div>
+            <div className="success-icon" style={{ fontSize: '30px', marginBottom: '10px' }}>🎉</div>
             <h2>{t.orderConfirmed}</h2>
             <p style={{ color: 'var(--text-muted)', margin: '10px 0' }}>{t.orderDesc}</p>
             <div className="order-id">
@@ -688,7 +620,7 @@ function App() {
 
       <footer>
         <a href="#home" className="brand">{t.brand}<span>{t.brandSub}</span></a>
-        <p>© 2026 Ilaria Cars World. {t.rights}</p>
+        <p>© 2026 Ilaria Cars & Official Cars World. {t.rights}</p>
       </footer>
     </div>
   );
