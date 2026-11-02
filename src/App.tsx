@@ -118,7 +118,6 @@ const BRAND_DATA = [
   }
 ];
 
-// دالة توليد الداتا بالكامل لتشمل أكثر من 100+ سيارة متنوعة في المعرض الرئيسي
 const generateAllCars = (): Car[] => {
   const cars: Car[] = [];
   let id = 1;
@@ -186,7 +185,7 @@ function App() {
     e.preventDefault();
     setIsCheckoutOpen(false);
     setOrderSuccess(true);
-    setOrderId('KZ-' + Math.floor(100000 + Math.random() * 900000));
+    setOrderId('ILARIA-' + Math.floor(100000 + Math.random() * 900000));
     setCart([]);
   };
 
@@ -211,13 +210,13 @@ function App() {
     <div className="app">
       <header className="navbar">
         <a href="#home" className="brand" onClick={() => setCurrentPage('home')}>
-          KARL<span>ZOLT</span>
+          ILARIA<span> CARS</span>
         </a>
 
         <nav className="nav-links">
-          <button className={currentPage === 'home' ? 'active' : ''} onClick={() => setCurrentPage('home')}>Home</button>
-          <button className={currentPage === 'showroom' ? 'active' : ''} onClick={() => setCurrentPage('showroom')}>Global Showroom</button>
-          <button className={currentPage === 'about' ? 'active' : ''} onClick={() => setCurrentPage('about')}>About Us</button>
+          <button className={currentPage === 'home' ? 'active' : ''} onClick={() => setCurrentPage('home')}>الرئيسية</button>
+          <button className={currentPage === 'showroom' ? 'active' : ''} onClick={() => setCurrentPage('showroom')}>معرض السيارات</button>
+          <button className={currentPage === 'about' ? 'active' : ''} onClick={() => setCurrentPage('about')}>من نحن</button>
         </nav>
 
         <div className="header-actions">
@@ -225,7 +224,7 @@ function App() {
             🛒 <span className="cart-count">{cart.reduce((a, b) => a + b.quantity, 0)}</span>
           </button>
           <button className="nav-button" onClick={() => setCurrentPage('showroom')}>
-            Explore ↗
+            استكشف ↗
           </button>
         </div>
       </header>
@@ -235,32 +234,32 @@ function App() {
           <div className="page-fade-in">
             <section className="hero">
               <div className="hero-content">
-                <span className="eyebrow">GLOBAL AUTOMOTIVE DIRECTORY</span>
-                <h1>THE WORLD'S FINEST<br /><span>CARS SHOWROOM.</span></h1>
+                <span className="eyebrow">إيلاريا لعالم السيارات</span>
+                <h1>أفخم وأرقى<br /><span>سيارات العالم.</span></h1>
                 <p>
-                  Search and reserve any vehicle worldwide: from Toyota Corolla and Nissan to Bugatti and Rolls-Royce.
+                  ابحث واحجز أفضل السيارات عالمياً من إيلاريا: من تويوتا ونيسان إلى بورش وبوجاتي ورولز رويس.
                 </p>
                 <div className="hero-buttons">
                   <button className="primary-btn" onClick={() => setCurrentPage('showroom')}>
-                    Explore All Cars 🏎️
+                    تصفح المعرض 🏎️
                   </button>
                   <button className="secondary-btn" onClick={() => setCurrentPage('about')}>
-                    Learn More
+                    اعرف المزيد
                   </button>
                 </div>
                 <div className="hero-stats">
-                  <div><strong>100+</strong><small>Loaded Models</small></div>
-                  <div><strong>100%</strong><small>Real Prices</small></div>
-                  <div><strong>24/7</strong><small>Instant Search</small></div>
+                  <div><strong>100+</strong><small>سيارة متاحة</small></div>
+                  <div><strong>100%</strong><small>أسعار حقيقية</small></div>
+                  <div><strong>24/7</strong><small>حجز أونلاين</small></div>
                 </div>
               </div>
 
               <div className="hero-image">
                 <img
                   src="https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?auto=format&fit=crop&w=1200&q=80"
-                  alt="Porsche 911 GT3"
+                  alt="Ilaria Cars"
                 />
-                <div className="image-label">KARL ZOLT DATABASE</div>
+                <div className="image-label">ILARIA EDITION</div>
               </div>
             </section>
           </div>
@@ -271,8 +270,8 @@ function App() {
             <section className="categories">
               <div className="section-heading">
                 <div>
-                  <span className="eyebrow">WORLDWIDE FLEET</span>
-                  <h2>Global Categories</h2>
+                  <span className="eyebrow">معرض إيلاريا الشامل</span>
+                  <h2>فئات السيارات</h2>
                 </div>
               </div>
 
@@ -292,17 +291,17 @@ function App() {
             <section className="cars-section">
               <div className="section-heading">
                 <div>
-                  <span className="eyebrow">GLOBAL SEARCH ENGINE</span>
-                  <h2>Search Any Vehicle</h2>
+                  <span className="eyebrow">محرك بحث إيلاريا</span>
+                  <h2>ابحث عن أي سيارة</h2>
                 </div>
-                <span className="car-count">{filteredCars.length} VEHICLES FOUND</span>
+                <span className="car-count">{filteredCars.length} سيارة متاحة</span>
               </div>
 
               <div className="search-box">
                 <span>🔍</span>
                 <input
                   type="text"
-                  placeholder="Type Corolla, Toyota, BMW, Nissan, Ferrari, Hyundai..."
+                  placeholder="اكتب اسم العربية (مثل: Corolla, Toyota, BMW, Nissan, Ferrari)..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                 />
@@ -316,20 +315,20 @@ function App() {
                       <span className="car-type">{car.type}</span>
                     </div>
                     <div className="car-info">
-                      <div className="car-year">{car.year} OFFICIAL MODEL</div>
+                      <div className="car-year">{car.year} موديل</div>
                       <h3 onClick={() => openCarDetails(car)}>{car.name}</h3>
                       
                       <div className="car-bottom">
                         <div className="car-bottom-row">
-                          <small style={{ color: 'var(--text-muted)' }}>MSRP Price</small>
+                          <small style={{ color: 'var(--text-muted)' }}>السعر</small>
                           <strong>${car.price.toLocaleString()}</strong>
                         </div>
                         <div className="card-btn-group">
                           <button className="details-btn" onClick={() => openCarDetails(car)}>
-                            Details 👁️
+                            التفاصيل 👁️
                           </button>
                           <button className="buy-btn" onClick={() => addToCart(car)}>
-                            Reserve 💳
+                            حجز 💳
                           </button>
                         </div>
                       </div>
@@ -340,7 +339,7 @@ function App() {
 
               {filteredCars.length === 0 && (
                 <p style={{ textAlign: 'center', color: 'var(--text-muted)', marginTop: '40px' }}>
-                  No vehicles found matching "{search}". Try searching "Toyota", "Corolla", "BMW", or "Nissan".
+                  لم نجد سيارات تطابق "{search}". جرب البحث عن "Toyota" أو "Corolla" أو "BMW".
                 </p>
               )}
             </section>
@@ -350,7 +349,7 @@ function App() {
         {currentPage === 'details' && selectedCar && (
           <div className="page-fade-in details-page">
             <button className="back-btn" onClick={() => setCurrentPage('showroom')}>
-              ← Back to Showroom
+              ← العودة للمعرض
             </button>
 
             <div className="details-container">
@@ -359,34 +358,34 @@ function App() {
               </div>
 
               <div className="details-info-box">
-                <span className="eyebrow">{selectedCar.year} OFFICIAL SPEC</span>
+                <span className="eyebrow">{selectedCar.year} المواصفات الرسمية</span>
                 <h1>{selectedCar.name}</h1>
                 <p className="description" style={{ color: 'var(--text-muted)', marginTop: '10px' }}>
-                  Authentic specification details for the {selectedCar.name}. Built with precision engineering and global performance standards.
+                  تفاصيل ومواصفات {selectedCar.name} مقدمة من إيلاريا لعالم السيارات.
                 </p>
 
                 <div className="specs-grid">
                   <div className="spec-card">
-                    <small>Horsepower</small>
-                    <strong>{selectedCar.hp} HP</strong>
+                    <small>القوة</small>
+                    <strong>{selectedCar.hp} حصان</strong>
                   </div>
                   <div className="spec-card">
-                    <small>0 - 100 km/h</small>
+                    <small>التسارع 0 - 100</small>
                     <strong>{selectedCar.acceleration}</strong>
                   </div>
                   <div className="spec-card">
-                    <small>Top Speed</small>
+                    <small>السرعة القصوى</small>
                     <strong>{selectedCar.topSpeed}</strong>
                   </div>
                 </div>
 
                 <div className="details-price-row">
                   <div>
-                    <small style={{ color: 'var(--text-muted)' }}>Official Price</small>
+                    <small style={{ color: 'var(--text-muted)' }}>سعر الحجز</small>
                     <h2 style={{ fontSize: '1.8rem', color: '#fff' }}>${selectedCar.price.toLocaleString()}</h2>
                   </div>
                   <button className="checkout-btn" style={{ width: 'auto', padding: '12px 24px' }} onClick={() => addToCart(selectedCar)}>
-                    Reserve Vehicle 💳
+                    احجز الآن 💳
                   </button>
                 </div>
               </div>
@@ -396,10 +395,10 @@ function App() {
 
         {currentPage === 'about' && (
           <div className="page-fade-in about-page" style={{ padding: '60px', textAlign: 'center' }}>
-            <span className="eyebrow">ABOUT KARL ZOLT</span>
-            <h1>EVERY CAR WORLDWIDE<br /><span>AT YOUR FINGERTIPS.</span></h1>
+            <span className="eyebrow">عن موقع إيلاريا</span>
+            <h1>موقع إيلاريا<br /><span>لعالم السيارات العالمية.</span></h1>
             <p className="about-text" style={{ color: 'var(--text-muted)', maxWidth: '600px', margin: '20px auto' }}>
-              Karl Zolt allows you to search and reserve vehicles ranging from everyday sedans to legendary hypercars.
+              منصة إيلاريا تتيح لك البحث عن أحدث وأرقى السيارات عالمياً مع إمكانية المعاينة والحجز أونلاين فوراً.
             </p>
           </div>
         )}
@@ -410,12 +409,12 @@ function App() {
         <div className="modal-overlay" onClick={() => setIsCartOpen(false)}>
           <div className="cart-drawer" onClick={(e) => e.stopPropagation()}>
             <div className="drawer-header">
-              <h3>Your Cart 🛒</h3>
+              <h3>سلة حجز إيلاريا 🛒</h3>
               <button onClick={() => setIsCartOpen(false)}>✕</button>
             </div>
 
             {cart.length === 0 ? (
-              <div className="empty-cart" style={{ padding: '20px 0', color: 'var(--text-muted)' }}><p>Your cart is empty.</p></div>
+              <div className="empty-cart" style={{ padding: '20px 0', color: 'var(--text-muted)' }}><p>السلة فارغة حالياً.</p></div>
             ) : (
               <>
                 <div className="cart-items">
@@ -432,7 +431,7 @@ function App() {
                 </div>
                 <div className="cart-footer">
                   <div className="total">
-                    <span>Total Amount:</span>
+                    <span>الإجمالي:</span>
                     <strong>${totalPrice.toLocaleString()}</strong>
                   </div>
                   <button 
@@ -442,7 +441,7 @@ function App() {
                       setIsCheckoutOpen(true);
                     }}
                   >
-                    Proceed to Credit Card Payment 💳
+                    متابعة الدفع بالبطاقة 💳
                   </button>
                 </div>
               </>
@@ -456,7 +455,7 @@ function App() {
         <div className="modal-overlay" onClick={() => setIsCheckoutOpen(false)}>
           <div className="checkout-modal" onClick={(e) => e.stopPropagation()}>
             <div className="drawer-header">
-              <h3>Credit Card Payment 🔒</h3>
+              <h3>الدفع الإلكتروني الآمن - إيلاريا 🔒</h3>
               <button onClick={() => setIsCheckoutOpen(false)}>✕</button>
             </div>
 
@@ -467,13 +466,13 @@ function App() {
                   {cardData.cardNumber || '•••• •••• •••• ••••'}
                 </div>
                 <div className="card-footer-display">
-                  <span>{cardData.name || 'CARDHOLDER NAME'}</span>
+                  <span>{cardData.name || 'اسم صاحب البطاقة'}</span>
                   <span>{cardData.expDate || 'MM/YY'}</span>
                 </div>
               </div>
 
               <div className="form-group">
-                <label>Cardholder Name</label>
+                <label>اسم صاحب البطاقة</label>
                 <input
                   type="text"
                   required
@@ -484,7 +483,7 @@ function App() {
               </div>
 
               <div className="form-group">
-                <label>Card Number</label>
+                <label>رقم البطاقة</label>
                 <input
                   type="text"
                   required
@@ -497,7 +496,7 @@ function App() {
 
               <div className="form-row">
                 <div className="form-group">
-                  <label>Expiry Date</label>
+                  <label>تاريخ الانتهاء</label>
                   <input
                     type="text"
                     required
@@ -508,7 +507,7 @@ function App() {
                   />
                 </div>
                 <div className="form-group">
-                  <label>CVC / CVV</label>
+                  <label>رمز الأمان (CVC)</label>
                   <input
                     type="password"
                     required
@@ -521,12 +520,12 @@ function App() {
               </div>
 
               <div className="checkout-summary" style={{ display: 'flex', justifyContent: 'space-between', margin: '15px 0' }}>
-                <span>Total Amount:</span>
+                <span>المبلغ الإجمالي:</span>
                 <strong>${totalPrice.toLocaleString()}</strong>
               </div>
 
               <button type="submit" className="pay-now-btn">
-                Confirm & Complete Payment 🚀
+                تأكيد وإتمام الحجز 🚀
               </button>
             </form>
           </div>
@@ -538,10 +537,10 @@ function App() {
         <div className="modal-overlay">
           <div className="success-modal" style={{ textAlign: 'center' }}>
             <div className="success-icon" style={{ fontSize: '3rem', marginBottom: '10px' }}>🎉</div>
-            <h2>Reservation Confirmed!</h2>
-            <p style={{ color: 'var(--text-muted)', margin: '10px 0' }}>Your transaction was processed successfully.</p>
+            <h2>تم تأكيد حجزك في إيلاريا!</h2>
+            <p style={{ color: 'var(--text-muted)', margin: '10px 0' }}>تمت عملية الدفع الوهمية بنجاح بنسبة 100%.</p>
             <div className="order-id">
-              Reference ID: <strong>{orderId}</strong>
+              رقم المرجعية: <strong>{orderId}</strong>
             </div>
             <button 
               className="primary-btn"
@@ -550,15 +549,15 @@ function App() {
                 setCurrentPage('showroom');
               }}
             >
-              Return to Showroom
+              العودة للمعرض
             </button>
           </div>
         </div>
       )}
 
       <footer>
-        <a href="#home" className="brand">KARL<span>ZOLT</span></a>
-        <p>© 2026 Karl Zolt World. All rights reserved.</p>
+        <a href="#home" className="brand">ILARIA<span> CARS</span></a>
+        <p>© 2026 Ilaria Cars World. جميع الحقوق محفوظة.</p>
       </footer>
     </div>
   );
