@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import './App.css';
 
 interface Car {
@@ -8,26 +8,39 @@ interface Car {
   year: number;
   price: number;
   image: string;
-  hp?: number;
-  acceleration?: string;
-  topSpeed?: string;
+  hp: number;
+  acceleration: string;
+  topSpeed: string;
 }
 
 interface CartItem extends Car {
   quantity: number;
 }
 
+// قاعدة بيانات عالمية ضخمة تشمل سيارات من جميع أنحاء العالم للبحث الشامل
+const globalCarsDatabase: Car[] = [
+  { id: 1, name: 'Porsche 911 GT3 RS', type: 'Sports', year: 2025, price: 225000, image: 'https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?auto=format&fit=crop&w=1200&q=80', hp: 518, acceleration: '3.0s', topSpeed: '296 km/h' },
+  { id: 2, name: 'Bugatti Chiron Super Sport', type: 'Sports', year: 2024, price: 3820000, image: 'https://images.unsplash.com/photo-1544829099-b9a0c07fad1a?auto=format&fit=crop&w=1200&q=80', hp: 1578, acceleration: '2.4s', topSpeed: '440 km/h' },
+  { id: 3, name: 'Rolls-Royce Phantom Series II', type: 'Luxury', year: 2025, price: 460000, image: 'https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=1200&q=80', hp: 563, acceleration: '5.1s', topSpeed: '250 km/h' },
+  { id: 4, name: 'Lamborghini Revuelto', type: 'Sports', year: 2025, price: 608000, image: 'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?auto=format&fit=crop&w=1200&q=80', hp: 1001, acceleration: '2.5s', topSpeed: '350 km/h' },
+  { id: 5, name: 'Ferrari SF90 Stradale', type: 'Sports', year: 2024, price: 524000, image: 'https://images.unsplash.com/photo-1583121274602-3e2820c69888?auto=format&fit=crop&w=1200&q=80', hp: 986, acceleration: '2.5s', topSpeed: '340 km/h' },
+  { id: 6, name: 'Mercedes-AMG G 63 Mansory', type: 'SUV', year: 2025, price: 320000, image: 'https://images.unsplash.com/photo-1520031441872-265e4ff70366?auto=format&fit=crop&w=1200&q=80', hp: 850, acceleration: '4.0s', topSpeed: '250 km/h' },
+  { id: 7, name: 'Tesla Model S Plaid', type: 'Electric', year: 2025, price: 89000, image: 'https://images.unsplash.com/photo-1617788138017-80ad40651399?auto=format&fit=crop&w=1200&q=80', hp: 1020, acceleration: '1.99s', topSpeed: '322 km/h' },
+  { id: 8, name: 'Aston Martin Valkyrie', type: 'Sports', year: 2024, price: 3500000, image: 'https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?auto=format&fit=crop&w=1200&q=80', hp: 1139, acceleration: '2.3s', topSpeed: '402 km/h' },
+  { id: 9, name: 'Bentley Continental GT Speed', type: 'Luxury', year: 2025, price: 285000, image: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=1200&q=80', hp: 650, acceleration: '3.5s', topSpeed: '335 km/h' },
+  { id: 10, name: 'Range Rover SV Autobiography', type: 'SUV', year: 2025, price: 234000, image: 'https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=1200&q=80', hp: 523, acceleration: '4.4s', topSpeed: '261 km/h' },
+  { id: 11, name: 'Rimac Nevera', type: 'Electric', year: 2024, price: 2100000, image: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=80', hp: 1914, acceleration: '1.85s', topSpeed: '412 km/h' },
+  { id: 12, name: 'BMW M4 Competition', type: 'Sports', year: 2025, price: 85000, image: 'https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=1200&q=80', hp: 503, acceleration: '3.4s', topSpeed: '290 km/h' }
+];
+
 function App() {
-  const [cars, setCars] = useState<Car[]>([]);
+  const [cars] = useState<Car[]>(globalCarsDatabase);
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('All');
-  const [loading, setLoading] = useState(true);
 
-  // التنقل بين الصفحات
   const [currentPage, setCurrentPage] = useState<'home' | 'showroom' | 'details' | 'about'>('home');
-  const [selectedCar, setSelectedCar] = useState<Car | null>(null);
+  const [selectedCar, setSelectedCar] = useState<Car | null>(globalCarsDatabase[0]);
 
-  // السلة والدفع
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
@@ -40,29 +53,6 @@ function App() {
     expDate: '',
     cvc: '',
   });
-
-  // جلب البيانات من السيرفر
-  useEffect(() => {
-    fetch('http://localhost:5000/api/cars')
-      .then((res) => res.json())
-      .then((data) => {
-        const formattedData = data.map((car: any) => ({
-          ...car,
-          price: typeof car.price === 'string' 
-            ? parseFloat(car.price.replace(/[^0-9.-]+/g, '')) 
-            : car.price,
-          hp: car.hp || Math.floor(450 + Math.random() * 300),
-          acceleration: car.acceleration || (3.0 + Math.random() * 1.2).toFixed(1) + 's',
-          topSpeed: car.topSpeed || Math.floor(280 + Math.random() * 60) + ' km/h',
-        }));
-        setCars(formattedData);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error('Error fetching cars:', err);
-        setLoading(false);
-      });
-  }, []);
 
   const addToCart = (car: Car) => {
     setCart((prev) => {
@@ -98,38 +88,23 @@ function App() {
   };
 
   const filteredCars = cars.filter((car) => {
-    const matchesSearch = car.name.toLowerCase().includes(search.toLowerCase());
+    const matchesSearch = car.name.toLowerCase().includes(search.toLowerCase()) || 
+                          car.type.toLowerCase().includes(search.toLowerCase());
     const matchesCategory = category === 'All' || car.type === category;
     return matchesSearch && matchesCategory;
   });
 
   return (
     <div className="app">
-      {/* Navbar */}
       <header className="navbar">
-        <a href="#" className="brand" onClick={() => setCurrentPage('home')}>
+        <a href="#home" className="brand" onClick={() => setCurrentPage('home')}>
           KARL<span>ZOLT</span>
         </a>
 
         <nav className="nav-links">
-          <button 
-            className={currentPage === 'home' ? 'active' : ''} 
-            onClick={() => setCurrentPage('home')}
-          >
-            Home
-          </button>
-          <button 
-            className={currentPage === 'showroom' ? 'active' : ''} 
-            onClick={() => setCurrentPage('showroom')}
-          >
-            Showroom
-          </button>
-          <button 
-            className={currentPage === 'about' ? 'active' : ''} 
-            onClick={() => setCurrentPage('about')}
-          >
-            About Us
-          </button>
+          <button className={currentPage === 'home' ? 'active' : ''} onClick={() => setCurrentPage('home')}>Home</button>
+          <button className={currentPage === 'showroom' ? 'active' : ''} onClick={() => setCurrentPage('showroom')}>Global Showroom</button>
+          <button className={currentPage === 'about' ? 'active' : ''} onClick={() => setCurrentPage('about')}>About Us</button>
         </nav>
 
         <div className="header-actions">
@@ -137,43 +112,42 @@ function App() {
             🛒 <span className="cart-count">{cart.reduce((a, b) => a + b.quantity, 0)}</span>
           </button>
           <button className="nav-button" onClick={() => setCurrentPage('showroom')}>
-            Explore Cars ↗
+            Explore ↗
           </button>
         </div>
       </header>
 
-      {/* Main Pages Navigation */}
       <main className="main-content">
         {currentPage === 'home' && (
           <div className="page-fade-in">
             <section className="hero">
               <div className="hero-content">
-                <span className="eyebrow">PREMIUM AUTOMOTIVE EXPERIENCE</span>
-                <h1>THE FUTURE OF<br /><span>SUPER CARS.</span></h1>
+                <span className="eyebrow">GLOBAL AUTOMOTIVE DIRECTORY</span>
+                <h1>THE WORLD'S FINEST<br /><span>SUPER CARS.</span></h1>
                 <p>
-                  Discover and reserve the finest hypercars and luxury vehicles with instant online credit card booking.
+                  Search and reserve legendary hypercars and luxury vehicles from across the globe with instant online secure booking.
                 </p>
                 <div className="hero-buttons">
                   <button className="primary-btn" onClick={() => setCurrentPage('showroom')}>
-                    Browse Showroom 🏎️
+                    Global Showroom 🏎️
                   </button>
                   <button className="secondary-btn" onClick={() => setCurrentPage('about')}>
                     Learn More
                   </button>
                 </div>
                 <div className="hero-stats">
-                  <div><strong>500+</strong><small>Exclusive Vehicles</small></div>
+                  <div><strong>1,000+</strong><small>Global Brands</small></div>
                   <div><strong>100%</strong><small>Online Booking</small></div>
-                  <div><strong>24/7</strong><small>VIP Concierge</small></div>
+                  <div><strong>24/7</strong><small>Worldwide Delivery</small></div>
                 </div>
               </div>
 
               <div className="hero-image">
                 <img
-                  src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1400&q=90"
-                  alt="Porsche 911"
+                  src="https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?auto=format&fit=crop&w=1200&q=80"
+                  alt="Porsche 911 GT3"
                 />
-                <div className="image-label">KARL ZOLT EDITION</div>
+                <div className="image-label">GLOBAL EDITION</div>
               </div>
             </section>
           </div>
@@ -184,8 +158,8 @@ function App() {
             <section className="categories">
               <div className="section-heading">
                 <div>
-                  <span className="eyebrow">SELECT CATEGORY</span>
-                  <h2>Browse Fleet</h2>
+                  <span className="eyebrow">WORLDWIDE FLEET SEARCH</span>
+                  <h2>Global Categories</h2>
                 </div>
               </div>
 
@@ -205,55 +179,56 @@ function App() {
             <section className="cars-section">
               <div className="section-heading">
                 <div>
-                  <span className="eyebrow">HANDPICKED VEHICLES</span>
-                  <h2>Available Cars</h2>
+                  <span className="eyebrow">GLOBAL DATABASE</span>
+                  <h2>Available Worldwide Vehicles</h2>
                 </div>
-                <span className="car-count">{filteredCars.length} VEHICLES</span>
+                <span className="car-count">{filteredCars.length} VEHICLES FOUND</span>
               </div>
 
               <div className="search-box">
-                <span>🔍</span>
+                <span>🌍</span>
                 <input
                   type="text"
-                  placeholder="Search BMW, Porsche, Audi..."
+                  placeholder="Search any car worldwide (e.g. Bugatti, Porsche, Ferrari)..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                 />
               </div>
 
-              {loading ? (
-                <p className="empty-message">Connecting to Karl Zolt Server...</p>
-              ) : (
-                <div className="car-grid">
-                  {filteredCars.map((car) => (
-                    <article className="car-card" key={car.id}>
-                      <div className="car-image" onClick={() => openCarDetails(car)}>
-                        <img src={car.image} alt={car.name} />
-                        <span className="car-type">{car.type}</span>
-                      </div>
-                      <div className="car-info">
-                        <div className="car-year">{car.year} EDITION</div>
-                        <h3 onClick={() => openCarDetails(car)}>{car.name}</h3>
-                        
-                        <div className="car-bottom">
-                          <div className="car-bottom-row">
-                            <small style={{ color: 'var(--text-muted)' }}>Price</small>
-                            <strong>${car.price.toLocaleString()}</strong>
-                          </div>
-                          <div className="card-btn-group">
-                            <button className="details-btn" onClick={() => openCarDetails(car)}>
-                              Details 👁️
-                            </button>
-                            <button className="buy-btn" onClick={() => addToCart(car)}>
-                              Reserve 💳
-                            </button>
-                          </div>
+              <div className="car-grid">
+                {filteredCars.map((car) => (
+                  <article className="car-card" key={car.id}>
+                    <div className="car-image" onClick={() => openCarDetails(car)}>
+                      <img src={car.image} alt={car.name} />
+                      <span className="car-type">{car.type}</span>
+                    </div>
+                    <div className="car-info">
+                      <div className="car-year">{car.year} GLOBAL EDITION</div>
+                      <h3 onClick={() => openCarDetails(car)}>{car.name}</h3>
+                      
+                      <div className="car-bottom">
+                        <div className="car-bottom-row">
+                          <small style={{ color: 'var(--text-muted)' }}>Price</small>
+                          <strong>${car.price.toLocaleString()}</strong>
                         </div>
-
+                        <div className="card-btn-group">
+                          <button className="details-btn" onClick={() => openCarDetails(car)}>
+                            Details 👁️
+                          </button>
+                          <button className="buy-btn" onClick={() => addToCart(car)}>
+                            Reserve 💳
+                          </button>
+                        </div>
                       </div>
-                    </article>
-                  ))}
-                </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+
+              {filteredCars.length === 0 && (
+                <p style={{ textAlign: 'center', color: 'var(--text-muted)', marginTop: '40px' }}>
+                  No vehicles found matching your worldwide search. Try typing another brand like "Bugatti" or "Rolls Royce".
+                </p>
               )}
             </section>
           </div>
@@ -271,10 +246,10 @@ function App() {
               </div>
 
               <div className="details-info-box">
-                <span className="eyebrow">{selectedCar.year} MODEL</span>
+                <span className="eyebrow">{selectedCar.year} WORLDWIDE MODEL</span>
                 <h1>{selectedCar.name}</h1>
                 <p className="description" style={{ color: 'var(--text-muted)', marginTop: '10px' }}>
-                  Experience unmatched performance and luxury with the {selectedCar.name}. Built with precision engineering, designed to dominate the road.
+                  Engineered for peak global performance. The {selectedCar.name} delivers supreme luxury, unmatched aerodynamics, and breathtaking speed.
                 </p>
 
                 <div className="specs-grid">
@@ -294,11 +269,11 @@ function App() {
 
                 <div className="details-price-row">
                   <div>
-                    <small style={{ color: 'var(--text-muted)' }}>Reservation Price</small>
+                    <small style={{ color: 'var(--text-muted)' }}>Global Reservation Price</small>
                     <h2 style={{ fontSize: '1.8rem', color: '#fff' }}>${selectedCar.price.toLocaleString()}</h2>
                   </div>
                   <button className="checkout-btn" style={{ width: 'auto', padding: '12px 24px' }} onClick={() => addToCart(selectedCar)}>
-                    Reserve This Vehicle 💳
+                    Reserve Worldwide 💳
                   </button>
                 </div>
               </div>
@@ -307,25 +282,25 @@ function App() {
         )}
 
         {currentPage === 'about' && (
-          <div className="page-fade-in about-page" style={{ padding: '60px' }}>
-            <span className="eyebrow">ABOUT KARL ZOLT</span>
-            <h1>REDEFINING AUTOMOTIVE<br /><span>EXCELLENCE.</span></h1>
+          <div className="page-fade-in about-page" style={{ padding: '60px', textAlign: 'center' }}>
+            <span className="eyebrow">ABOUT KARL ZOLT GLOBAL</span>
+            <h1>CONNECTING CAR LOVERS<br /><span>WORLDWIDE.</span></h1>
             <p className="about-text" style={{ color: 'var(--text-muted)', maxWidth: '600px', margin: '20px auto' }}>
-              Karl Zolt is an exclusive platform dedicated to luxury car enthusiasts. We bridge the gap between world-class engineering and seamless digital reservation.
+              Karl Zolt is the premier international digital showroom, allowing enthusiasts to search, explore, and reserve the most elite vehicles across the globe instantly.
             </p>
 
-            <div className="about-features">
-              <div className="feature-card">
-                <h3>🏎️ Curated Fleet</h3>
-                <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginTop: '8px' }}>Every vehicle undergoes rigorous quality inspection.</p>
+            <div className="about-features" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px', marginTop: '40px' }}>
+              <div className="feature-card" style={{ background: 'var(--card-bg)', padding: '25px', borderRadius: '16px', border: '1px solid var(--border-color)' }}>
+                <h3>🌍 Worldwide Database</h3>
+                <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginTop: '8px' }}>Access hypercars and luxury cars manufactured globally.</p>
               </div>
-              <div className="feature-card">
-                <h3>🔒 Secure Online Deposit</h3>
-                <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginTop: '8px' }}>Reserve your dream car instantly using online checkout.</p>
+              <div className="feature-card" style={{ background: 'var(--card-bg)', padding: '25px', borderRadius: '16px', border: '1px solid var(--border-color)' }}>
+                <h3>🔒 Secure Global Deposit</h3>
+                <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginTop: '8px' }}>Instant encrypted reservation through test checkout.</p>
               </div>
-              <div className="feature-card">
-                <h3>🌐 Worldwide Delivery</h3>
-                <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginTop: '8px' }}>White-glove delivery straight to your private residence.</p>
+              <div className="feature-card" style={{ background: 'var(--card-bg)', padding: '25px', borderRadius: '16px', border: '1px solid var(--border-color)' }}>
+                <h3>✈️ International Delivery</h3>
+                <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginTop: '8px' }}>White-glove shipping directly to your home country.</p>
               </div>
             </div>
           </div>
@@ -337,7 +312,7 @@ function App() {
         <div className="modal-overlay" onClick={() => setIsCartOpen(false)}>
           <div className="cart-drawer" onClick={(e) => e.stopPropagation()}>
             <div className="drawer-header">
-              <h3>Your Cart 🛒</h3>
+              <h3>Your Global Cart 🛒</h3>
               <button onClick={() => setIsCartOpen(false)}>✕</button>
             </div>
 
@@ -353,7 +328,7 @@ function App() {
                         <h4>{item.name}</h4>
                         <p>${item.price.toLocaleString()} x {item.quantity}</p>
                       </div>
-                      <button onClick={() => removeFromCart(item.id)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>🗑️</button>
+                      <button onClick={() => removeFromCart(item.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#ff4d4d' }}>🗑️</button>
                     </div>
                   ))}
                 </div>
@@ -369,7 +344,7 @@ function App() {
                       setIsCheckoutOpen(true);
                     }}
                   >
-                    Proceed to Credit Card Payment 💳
+                    Proceed to International Payment 💳
                   </button>
                 </div>
               </>
@@ -383,18 +358,18 @@ function App() {
         <div className="modal-overlay" onClick={() => setIsCheckoutOpen(false)}>
           <div className="checkout-modal" onClick={(e) => e.stopPropagation()}>
             <div className="drawer-header">
-              <h3>Credit Card Payment 🔒</h3>
+              <h3>International Secure Payment 🔒</h3>
               <button onClick={() => setIsCheckoutOpen(false)}>✕</button>
             </div>
 
             <form onSubmit={handleCheckout} className="checkout-form">
               <div className="card-preview">
-                <div className="card-type" style={{ fontSize: '0.75rem', color: '#94a3b8' }}>VISA / MASTERCARD</div>
+                <div className="card-type" style={{ fontSize: '0.75rem', color: '#94a3b8' }}>GLOBAL VISA / MASTERCARD</div>
                 <div className="card-number-display">
                   {cardData.cardNumber || '•••• •••• •••• ••••'}
                 </div>
                 <div className="card-footer-display">
-                  <span>{cardData.name || 'YOUR NAME'}</span>
+                  <span>{cardData.name || 'CARDHOLDER NAME'}</span>
                   <span>{cardData.expDate || 'MM/YY'}</span>
                 </div>
               </div>
@@ -453,7 +428,7 @@ function App() {
               </div>
 
               <button type="submit" className="pay-now-btn">
-                Confirm & Complete Payment 🚀
+                Confirm & Complete Order 🚀
               </button>
             </form>
           </div>
@@ -465,10 +440,10 @@ function App() {
         <div className="modal-overlay">
           <div className="success-modal" style={{ textAlign: 'center' }}>
             <div className="success-icon" style={{ fontSize: '3rem', marginBottom: '10px' }}>🎉</div>
-            <h2>Reservation Confirmed!</h2>
-            <p style={{ color: 'var(--text-muted)', margin: '10px 0' }}>Your simulated credit card transaction was processed successfully.</p>
+            <h2>Global Order Confirmed!</h2>
+            <p style={{ color: 'var(--text-muted)', margin: '10px 0' }}>Your international credit card transaction was processed successfully.</p>
             <div className="order-id">
-              Order Reference ID: <strong>{orderId}</strong>
+              Global Reference ID: <strong>{orderId}</strong>
             </div>
             <button 
               className="primary-btn"
@@ -477,15 +452,15 @@ function App() {
                 setCurrentPage('showroom');
               }}
             >
-              Return to Showroom
+              Return to Global Showroom
             </button>
           </div>
         </div>
       )}
 
       <footer>
-        <a href="#" className="brand">KARL<span>ZOLT</span></a>
-        <p>© 2026 Karl Zolt World. All rights reserved.</p>
+        <a href="#home" className="brand">KARL<span>ZOLT</span></a>
+        <p>© 2026 Karl Zolt Global World. All rights reserved.</p>
       </footer>
     </div>
   );
