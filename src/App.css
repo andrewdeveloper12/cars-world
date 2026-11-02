@@ -1,0 +1,675 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap');
+
+:root {
+  --bg-color: #0b0d17;
+  --card-bg: rgba(22, 27, 46, 0.85);
+  --primary-accent: #6366f1;
+  --secondary-accent: #3b82f6;
+  --gradient-glow: linear-gradient(135deg, #6366f1, #a855f7);
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --border-color: rgba(255, 255, 255, 0.1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  overflow-x: hidden;
+}
+
+.app {
+  min-height: 100vh;
+  background: radial-gradient(circle at 50% 0%, #1e1b4b 0%, #0b0d17 70%);
+}
+
+/* Header & Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 50px;
+  background: rgba(11, 13, 23, 0.9);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-color);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.brand {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: #fff;
+  text-decoration: none;
+}
+
+.brand span {
+  color: var(--primary-accent);
+}
+
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links button {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.nav-links button:hover, .nav-links button.active {
+  color: #fff;
+  text-shadow: 0 0 10px var(--primary-accent);
+}
+
+.header-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.cart-badge-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 30px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: 0.3s;
+}
+
+.cart-count {
+  background: var(--primary-accent);
+  color: #fff;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 50%;
+  font-size: 0.75rem;
+}
+
+.nav-button, .primary-btn {
+  background: var(--gradient-glow);
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 30px;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+/* Hero Section */
+.hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  padding: 50px;
+  align-items: center;
+}
+
+.hero-content h1 {
+  font-size: 3.2rem;
+  line-height: 1.1;
+  font-weight: 800;
+}
+
+.hero-content h1 span {
+  background: var(--gradient-glow);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.eyebrow {
+  color: var(--primary-accent);
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 15px;
+  margin: 25px 0;
+}
+
+.secondary-btn {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 30px;
+  cursor: pointer;
+}
+
+.hero-stats {
+  display: flex;
+  gap: 30px;
+  border-top: 1px solid var(--border-color);
+  padding-top: 20px;
+}
+
+.hero-stats strong {
+  display: block;
+  font-size: 1.6rem;
+  color: #fff;
+}
+
+.hero-stats small {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.hero-image {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.hero-image img {
+  width: 100%;
+  max-width: 480px;
+  max-height: 320px;
+  object-fit: cover;
+  border-radius: 16px;
+  border: 1px solid var(--border-color);
+}
+
+.image-label {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  background: rgba(11, 13, 23, 0.85);
+  padding: 5px 12px;
+  border-radius: 15px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  border: 1px solid var(--border-color);
+}
+
+/* Categories & Search */
+.categories {
+  padding: 20px 50px;
+}
+
+.category-list {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+  flex-wrap: wrap;
+}
+
+.category {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: 0.2s;
+}
+
+.category.active, .category:hover {
+  background: var(--primary-accent);
+  color: #fff;
+  border-color: var(--primary-accent);
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  padding: 10px 18px;
+  border-radius: 30px;
+  margin-top: 15px;
+  max-width: 400px;
+}
+
+.search-box input {
+  background: transparent;
+  border: none;
+  color: #fff;
+  margin-left: 10px;
+  width: 100%;
+  outline: none;
+  font-size: 0.9rem;
+}
+
+/* Cars Showcase Section */
+.cars-section {
+  padding: 30px 50px;
+}
+
+.section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.car-count {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+.car-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 25px;
+  margin-top: 25px;
+}
+
+.car-card {
+  background: var(--card-bg);
+  border-radius: 14px;
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: 0.3s;
+}
+
+.car-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--primary-accent);
+  box-shadow: 0 10px 25px rgba(99, 102, 241, 0.2);
+}
+
+.car-image {
+  position: relative;
+  width: 100%;
+  height: 170px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.car-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: 0.4s;
+}
+
+.car-card:hover .car-image img {
+  transform: scale(1.05);
+}
+
+.car-type {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: rgba(11, 13, 23, 0.8);
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--primary-accent);
+  border: 1px solid var(--border-color);
+}
+
+.car-info {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: space-between;
+}
+
+.car-year {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.car-info h3 {
+  font-size: 1.1rem;
+  margin: 4px 0 12px 0;
+  color: #fff;
+  cursor: pointer;
+}
+
+/* حل مشكلة زرار الحجز وتداخل النصوص */
+.car-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--border-color);
+  padding-top: 10px;
+  margin-top: auto;
+}
+
+.car-bottom strong {
+  font-size: 1.1rem;
+  color: #fff;
+}
+
+.card-btn-group {
+  display: flex;
+  gap: 6px;
+}
+
+.details-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-color);
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.buy-btn {
+  background: var(--gradient-glow);
+  border: none;
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.75rem;
+  cursor: pointer;
+  white-space: nowrap; /* يمنع نزول الكلام تحت بعضه */
+  box-shadow: 0 3px 10px rgba(99, 102, 241, 0.3);
+}
+
+.buy-btn:hover {
+  opacity: 0.9;
+}
+
+/* Details Page */
+.details-page {
+  padding: 40px 50px;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+}
+
+.details-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 35px;
+  background: var(--card-bg);
+  padding: 30px;
+  border-radius: 16px;
+  border: 1px solid var(--border-color);
+}
+
+.details-image-box img {
+  width: 100%;
+  max-height: 350px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.specs-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.spec-card {
+  background: rgba(255, 255, 255, 0.03);
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  text-align: center;
+}
+
+.spec-card strong {
+  display: block;
+  font-size: 1rem;
+  color: #fff;
+  margin-top: 3px;
+}
+
+.spec-card small {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+}
+
+.details-price-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 25px;
+}
+
+/* حل مشكلة السلة الجانبية (Cart Drawer Overlay) وتأكيد ظهورها بصورة صحيحة */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(6px);
+  z-index: 1000;
+  display: flex;
+  justify-content: flex-end; /* تظهر على يمين الشاشة كلوحة جانبية */
+  align-items: stretch;
+}
+
+.cart-drawer {
+  background: #0f1221;
+  color: #fff;
+  width: 380px;
+  max-width: 100%;
+  height: 100%;
+  padding: 25px;
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.8);
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid var(--border-color);
+  animation: slideInRight 0.3s ease-out;
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+.checkout-modal, .success-modal {
+  background: #0f1221;
+  color: #fff;
+  width: 400px;
+  max-width: 90%;
+  margin: auto;
+  padding: 25px;
+  border-radius: 16px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+}
+
+.drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 12px;
+  margin-bottom: 15px;
+}
+
+.drawer-header h3 {
+  font-size: 1.1rem;
+}
+
+.drawer-header button {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.cart-items {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 15px;
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255,255,255,0.03);
+  padding: 8px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  border: 1px solid var(--border-color);
+}
+
+.cart-item img {
+  width: 50px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.item-details h4 {
+  font-size: 0.85rem;
+}
+
+.item-details p {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.cart-footer {
+  border-top: 1px solid var(--border-color);
+  padding-top: 15px;
+}
+
+.total {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1rem;
+  margin-bottom: 12px;
+}
+
+.checkout-btn, .pay-now-btn {
+  width: 100%;
+  background: var(--gradient-glow);
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+.card-preview {
+  background: linear-gradient(135deg, #312e81, #1e1b4b);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 16px;
+  margin: 12px 0;
+}
+
+.card-number-display {
+  font-size: 1.1rem;
+  letter-spacing: 2px;
+  margin: 15px 0;
+  font-family: monospace;
+}
+
+.card-footer-display {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.checkout-form .form-group {
+  margin-bottom: 10px;
+}
+
+.checkout-form label {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-bottom: 3px;
+}
+
+.checkout-form input {
+  width: 100%;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border-color);
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.form-row {
+  display: flex;
+  gap: 10px;
+}
+
+footer {
+  text-align: center;
+  padding: 30px;
+  border-top: 1px solid var(--border-color);
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 15px 20px;
+  }
+  .nav-links {
+    display: none;
+  }
+  .hero {
+    grid-template-columns: 1fr;
+    padding: 30px 20px;
+    text-align: center;
+  }
+  .hero-content h1 {
+    font-size: 2.2rem;
+  }
+  .hero-buttons {
+    justify-content: center;
+  }
+  .hero-stats {
+    justify-content: center;
+    gap: 15px;
+  }
+  .cars-section, .categories, .details-page {
+    padding: 20px;
+  }
+  .details-container {
+    grid-template-columns: 1fr;
+    padding: 20px;
+  }
+  .cart-drawer {
+    width: 100% !important;
+  }
+}
